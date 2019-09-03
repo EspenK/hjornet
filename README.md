@@ -1,6 +1,7 @@
 How to run the application
 ==========================
 Required software to build and run this project
+
 1. [Java Development Kit 11](https://adoptopenjdk.net/?variant=openjdk11&jvmVariant=hotspot)
 2. [Maven](https://maven.apache.org/download.cgi) (Optional)
 3. [Payara](https://www.payara.fish/software/downloads) (Optional)
