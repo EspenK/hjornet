@@ -15,8 +15,8 @@ Below describes several ways to build and run the application.
 Start with maven
 ----------------
 1. Build & run: 
-   - ./mvnw package payara-micro:start
-   - Context is http://localhost:8080
+   + ./mvnw package payara-micro:start
+   + Context is http://localhost:8080
 
 Create bundle and start with java (Jakarta EE - Boot)
 -------------------------------
