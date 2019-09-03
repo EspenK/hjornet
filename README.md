@@ -15,24 +15,24 @@ Below describes several ways to build and run the application.
 Start with maven
 ----------------
 1. Build & run: 
-   + ./mvnw package payara-micro:start
-   + Context is http://localhost:8080
+   * ./mvnw package payara-micro:start
+   * Context is http://localhost:8080
 
 Create bundle and start with java (Jakarta EE - Boot)
 -------------------------------
 1. Build: .
-   - /mvnw payara-micro:bundle 
+   * /mvnw payara-micro:bundle 
 2. Run: 
-   - java -jar target/fant-microbundle.jar
-   - Context is http://localhost:8080/
+   * java -jar target/fant-microbundle.jar
+   * Context is http://localhost:8080/
 
 Create war and deploy in Payara server:
 ---------------------------------------
 1. Build: 
-   - ./mvnw package 
+   * ./mvnw package 
 2. Run: 
-   - Deploy target/jakarta-template.war in Payara server
-   - Context is http://localhost:8080/jakarta-template
+   * Deploy target/jakarta-template.war in Payara server
+   * Context is http://localhost:8080/jakarta-template
     
 Create Docker deployment & start with Docker
 --------------------------------------------
@@ -41,4 +41,4 @@ for more information
 
 1. ./mvnw package jib:dockerBuild
 2. docker run -d -p 8080:8080 jakarta-template
-    - Context is http://localhost:8080/
+    * Context is http://localhost:8080/
