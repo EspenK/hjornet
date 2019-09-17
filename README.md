@@ -21,9 +21,9 @@ Start with maven
 Create bundle and start with java (Jakarta EE - Boot)
 -------------------------------
 1. Build: .
-   * /mvnw payara-micro:bundle 
+   * ./mvnw payara-micro:bundle 
 2. Run: 
-   * java -jar target/fant-microbundle.jar
+   * java -jar target/jakarta-template-microbundle.jar
    * Context is http://localhost:8080/
 
 Create war and deploy in Payara server:
