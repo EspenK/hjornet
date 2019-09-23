@@ -1,11 +1,11 @@
-package no.ntnu.tollefsen.template;
+package me.kverna.hjornet;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import no.ntnu.tollefsen.template.domain.Group;
+import me.kverna.hjornet.domain.Group;
 
 /**
  *

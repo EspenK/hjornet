@@ -1,11 +1,11 @@
-package no.ntnu.tollefsen.template;
+package me.kverna.hjornet;
 
 import javax.annotation.Resource;
 import javax.annotation.sql.DataSourceDefinition;
 import javax.ejb.Singleton;
 import javax.enterprise.inject.Produces;
 import javax.sql.DataSource;
-import static no.ntnu.tollefsen.template.DatasourceProducer.JNDI_NAME;
+import static me.kverna.hjornet.DatasourceProducer.JNDI_NAME;
 
 
 /**

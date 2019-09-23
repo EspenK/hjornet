@@ -1,4 +1,4 @@
-package no.ntnu.tollefsen.template;
+package me.kverna.hjornet;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
