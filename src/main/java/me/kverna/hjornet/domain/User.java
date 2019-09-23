@@ -1,4 +1,4 @@
-package no.ntnu.tollefsen.template.domain;
+package me.kverna.hjornet.domain;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -24,6 +24,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.Version;
+import javax.validation.constraints.Email;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,10 +43,15 @@ public class User implements Serializable {
     }
 
     @Id
-    String userid;
+    @Email
+    String email;
+
+    String password;
 
     @JsonbTransient
-    String password;
+    public String getPassword() {
+        return this.password;
+    }
 
     @Version
     Timestamp version;
@@ -57,18 +64,19 @@ public class User implements Serializable {
 
     @ManyToMany
     @JoinTable(name="AUSERGROUP",
-            joinColumns = @JoinColumn(name="userid", referencedColumnName = "userid"),
+            joinColumns = @JoinColumn(name="email", referencedColumnName = "email"),
             inverseJoinColumns = @JoinColumn(name="name",referencedColumnName = "name"))
     List<Group> groups;
 
     String firstName;
-    String middleName;
     String lastName;
     String phoneNumber;
-    String email;
+    String streetAddress;
+    String postalArea;
+    String postalCode;
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "auser_properties", joinColumns=@JoinColumn(name="userid"))
+    @CollectionTable(name = "auser_properties", joinColumns=@JoinColumn(name="email"))
     @MapKeyColumn(name="key")
     @Column(name = "value")
     Map<String,String> properties = new HashMap<String, String>();
