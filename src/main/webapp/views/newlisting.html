@@ -1,0 +1,17 @@
+<form class="padded" id="signin-form" onsubmit="return false">
+    <div>
+        <input id="title" name="title" placeholder="Title" required title="title" type="text">
+    </div>
+    <div>
+        <input id="price" name="price" placeholder="Price" required title="price" type="text">
+    </div>
+    <div>
+        <input id="image" name="image" placeholder="Image url" required title="image" type="text">
+    </div>
+    <div>
+        <textarea id="description" name="description" placeholder="Description" required title="description"></textarea>
+    </div>
+    <div>
+        <input onclick="handleNewListing(this.form)" type="button" value="Submit">
+    </div>
+</form>
