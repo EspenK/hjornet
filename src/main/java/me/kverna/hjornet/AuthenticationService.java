@@ -39,6 +39,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import me.kverna.hjornet.domain.Group;
 import me.kverna.hjornet.domain.User;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -82,6 +83,7 @@ public class AuthenticationService {
      */
     @GET
     @Path("login")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response login(
             @QueryParam("email") @NotBlank String email,
             @QueryParam("password") @NotBlank String password,
@@ -92,12 +94,16 @@ public class AuthenticationService {
         if (result.getStatus() == CredentialValidationResult.Status.VALID) {
             String token = issueToken(result.getCallerPrincipal().getName(),
                     result.getCallerGroups(), request);
+            JSONObject message = new JSONObject();
+            message.put("token", token);
             return Response
-                    .ok(token)
+                    .ok(message)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                     .build();
         } else {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+            JSONObject message = new JSONObject();
+            message.put("message", "user credentials are not valid");
+            return Response.status(Response.Status.UNAUTHORIZED).entity(message).build();
         }
     }
 
@@ -154,17 +160,16 @@ public class AuthenticationService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createUser(User user) {
         User existingUser = em.find(User.class, user.getEmail());
-        Response response;
         if (existingUser == null) {
             user.setPassword(hasher.generate(user.getPassword().toCharArray()));
             Group usergroup = em.find(Group.class, Group.USER);
             user.getGroups().add(usergroup);
-            response = Response.ok(em.merge(user)).build();
+            return Response.ok(em.merge(user)).build();
         } else {
-            log.log(Level.INFO, "user already exists {0}", user.getEmail());
-            response = Response.status(Response.Status.BAD_REQUEST).build();
+            JSONObject message = new JSONObject();
+            message.put("message", "user with that email already exists");
+            return Response.status(Response.Status.BAD_REQUEST).entity(message).build();
         }
-        return response;
     }
 
     /**
@@ -203,7 +208,9 @@ public class AuthenticationService {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        return Response.ok().build();
+        JSONObject message = new JSONObject();
+        message.put("message", "role added");
+        return Response.ok().entity(message).build();
     }
 
     /**

@@ -35,7 +35,8 @@ async function handleSignIn(form) {
     if (response.status !== 200) {
         console.log('user not logged in');
     } else {
-        localStorage.setItem('bearer', await response.json());
+        let data = await response.json();
+        localStorage.setItem('bearer', data.token);
         await updateNavUser();
         location.href = '#listings'
     }
@@ -43,15 +44,7 @@ async function handleSignIn(form) {
 
 async function handleSignOut() {
     if (isBearerCached()) {
-        let response = await fetch('api/auth/logout', {
-            method: 'GET',
-            withCredentials: true,
-            credentials: 'include',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.bearer,
-                'Content-Type': 'application/json'
-            }
-        });
+        let response = await fetch_secure('api/auth/logout', {method: 'GET'});
         if (response.status !== 200) {
             console.log('user was not logged out');
         } else {
@@ -68,15 +61,7 @@ function isBearerCached() {
 
 async function getCurrentUser() {
     if (isBearerCached()) {
-        let response = await fetch('api/auth/currentuser', {
-            method: 'GET',
-            withCredentials: true,
-            credentials: 'include',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.bearer,
-                'Content-Type': 'application/json'
-            }
-        });
+        let response = await fetch_secure('api/auth/currentuser', {method: 'GET'});
         if (response.status !== 200) {
             return null;
         } else {
@@ -94,4 +79,19 @@ async function updateNavUser() {
     } else {
         document.getElementById('navUser').innerHTML = '<a href="#signin">Sign in</a> or <a href="#signup">Sign up</a>'
     }
+}
+
+async function fetch_secure(input, init) {
+    if (!isBearerCached()) {
+        return null;
+    }
+
+    init = init || {};
+    init.headers = init.headers || {};
+
+    init.withCredentials = true;
+    init.credentials = 'include';
+    init.headers.Authorization = 'Bearer ' + localStorage.bearer;
+
+    return await fetch(input, init);
 }

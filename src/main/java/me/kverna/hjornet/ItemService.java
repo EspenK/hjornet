@@ -5,6 +5,7 @@ import me.kverna.hjornet.domain.Group;
 import me.kverna.hjornet.domain.Item;
 import me.kverna.hjornet.domain.User;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.json.simple.JSONObject;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -53,25 +54,27 @@ public class ItemService {
     public Response buy(@QueryParam("id") @NotNull int id) {
         Item item = em.find(Item.class, id);
         if (item == null) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("item does not exists")
-                    .build();
+            JSONObject message = new JSONObject();
+            message.put("message", "item does not exist");
+            return Response.status(Response.Status.BAD_REQUEST).entity(message).build();
         }
 
         if (item.getBuyer() != null) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("somebody already bought this item")
-                    .build();
+            JSONObject message = new JSONObject();
+            message.put("message", "somebody already bought this item");
+            return Response.status(Response.Status.BAD_REQUEST).entity(message).build();
         }
 
         User buyer = em.find(User.class, principal.getName());
         if (buyer.equals(item.getOwner())) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("you can not buy your own item")
-                    .build();
+            JSONObject message = new JSONObject();
+            message.put("message", "you can not buy your own item");
+            return Response.status(Response.Status.BAD_REQUEST).entity(message).build();
         }
 
         item.setBuyer(buyer);
-        return Response.ok(item).entity("item bought successfully").build();
+        JSONObject message = new JSONObject();
+        message.put("message", "item bought successfully");
+        return Response.ok(item).entity(message).build();
     }
 }
