@@ -1,0 +1,14 @@
+<form class="padded" id="item-form" onsubmit="return false">
+    <div>
+        <input id="title" name="title" placeholder="Title" required title="title" type="text">
+    </div>
+    <div>
+        <input id="price" name="price" placeholder="Price" required title="price" type="number">
+    </div>
+    <div>
+        <textarea id="description" name="description" placeholder="Description" required title="description"></textarea>
+    </div>
+    <div>
+        <input onclick="handleNewItem(this.form)" type="button" value="Submit">
+    </div>
+</form>

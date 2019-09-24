@@ -18,7 +18,8 @@ async function handleSignUp(form) {
     });
 
     if (response.status !== 200) {
-        console.log('user not created')
+        let data = await response.json();
+        console.log(data.message)
     } else {
         location.href = '#signin';
     }
@@ -33,12 +34,13 @@ async function handleSignIn(form) {
     });
 
     if (response.status !== 200) {
-        console.log('user not logged in');
+        let data = await response.json();
+        console.log(data.message)
     } else {
         let data = await response.json();
         localStorage.setItem('bearer', data.token);
         await updateNavUser();
-        location.href = '#listings'
+        location.href = '#items'
     }
 }
 
@@ -50,7 +52,7 @@ async function handleSignOut() {
         } else {
             localStorage.removeItem('bearer');
             await updateNavUser();
-            location.href = '#listings';
+            location.href = '#items';
         }
     }
 }

@@ -57,8 +57,8 @@ Router.prototype = {
             xhttp.open('GET', url, true);
             xhttp.send();
         })(this);
-        if (htmlName === 'listings.html') {
-            showListings();
+        if (htmlName === 'items.html') {
+            showItems();
         }
     }
 };
