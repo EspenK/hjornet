@@ -13,9 +13,14 @@ function waitForElementFirst(element, time, func, arg) {
 }
 
 async function handleNewItem(form) {
+    let preview = document.querySelector('img');
+    let file = document.querySelector('input[type=file]').files[0];
+    let encodedImage = await readFileAsync(file);
+    preview.src = encodedImage;
     let item = {
         'title': form.title.value,
         'price': parseInt(form.price.value, 10),
+        'image': encodedImage,
         'description': form.description.value
     };
     let response = await fetch_secure('api/item/create', {
@@ -58,7 +63,7 @@ async function _showItems(container) {
         let price = item.buyer == null ? item.price + ' kr' : 'Sold';
 
         section.innerHTML = `
-        <img alt="${item.title}" src="img/stock.jpg">
+        <img alt="${item.title}" src="api/item/image?id=${item.id}">
         <div class="padded left">${item.owner.postalArea} ${item.owner.postalCode}</div>
         <div class="padded right price">${price}</div>
         <div class="padded clear title">${item.title}</div>
@@ -101,7 +106,7 @@ async function _showItem(container, item) {
     let price = item.buyer == null ? item.price + ' kr' : 'Sold';
 
     section.innerHTML = `
-    <img alt="${item.title}" src="img/stock.jpg">
+    <img alt="${item.title}" src="api/item/image?id=${item.id}">
     <div class="padded left">${item.owner.postalArea} ${item.owner.postalCode}, ${item.owner.streetAddress}</div>
     <div class="padded right price">${price}</div>
     <div class="padded clear title">${item.title}</div>
@@ -120,4 +125,16 @@ async function handleBuy(id) {
     console.log(data.message);
 
     location.href = '#items';
+}
+
+function readFileAsync(file) {
+    return new Promise(resolve => {
+        let reader = new FileReader();
+
+        reader.onloadend = function() {
+            resolve(reader.result);
+        };
+
+        reader.readAsDataURL(file);
+    })
 }

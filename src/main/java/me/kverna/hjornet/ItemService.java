@@ -17,6 +17,9 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Path("item")
 @Stateless
@@ -29,6 +32,14 @@ public class ItemService {
 
     @Inject
     JsonWebToken principal;
+
+    @GET
+    @Path("image")
+    public Response image (@QueryParam("id") @NotNull int id) throws IOException {
+        Item item = em.find(Item.class, id);
+        return Response.ok(Files.newInputStream(Paths.get(item.getImage().getPath())))
+                .type(item.getImage().getType()).build();
+    }
 
     @POST
     @Path("create")
