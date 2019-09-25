@@ -5,7 +5,7 @@ import me.kverna.hjornet.domain.Group;
 import me.kverna.hjornet.domain.Item;
 import me.kverna.hjornet.domain.User;
 import org.eclipse.microprofile.jwt.JsonWebToken;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -51,29 +51,27 @@ public class ItemService {
     @PATCH
     @Path("buy")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(value = {Group.USER})
     public Response buy(@QueryParam("id") @NotNull int id) {
         Item item = em.find(Item.class, id);
+        JSONObject message = new JSONObject();
         if (item == null) {
-            JSONObject message = new JSONObject();
             message.put("message", "item does not exist");
             return Response.status(Response.Status.BAD_REQUEST).entity(message).build();
         }
 
         if (item.getBuyer() != null) {
-            JSONObject message = new JSONObject();
             message.put("message", "somebody already bought this item");
             return Response.status(Response.Status.BAD_REQUEST).entity(message).build();
         }
 
         User buyer = em.find(User.class, principal.getName());
         if (buyer.equals(item.getOwner())) {
-            JSONObject message = new JSONObject();
             message.put("message", "you can not buy your own item");
             return Response.status(Response.Status.BAD_REQUEST).entity(message).build();
         }
 
         item.setBuyer(buyer);
-        JSONObject message = new JSONObject();
         message.put("message", "item bought successfully");
         return Response.ok(item).entity(message).build();
     }

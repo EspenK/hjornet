@@ -39,7 +39,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import me.kverna.hjornet.domain.Group;
 import me.kverna.hjornet.domain.User;
 import org.eclipse.microprofile.jwt.JsonWebToken;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 /**
  *
@@ -91,17 +91,13 @@ public class AuthenticationService {
         CredentialValidationResult result = identityStoreHandler.validate(
                 new UsernamePasswordCredential(email, password));
 
+        JSONObject message = new JSONObject();
         if (result.getStatus() == CredentialValidationResult.Status.VALID) {
             String token = issueToken(result.getCallerPrincipal().getName(),
                     result.getCallerGroups(), request);
-            JSONObject message = new JSONObject();
             message.put("token", token);
-            return Response
-                    .ok(message)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                    .build();
+            return Response.ok(message).header(HttpHeaders.AUTHORIZATION, "Bearer " + token).build();
         } else {
-            JSONObject message = new JSONObject();
             message.put("message", "user credentials are not valid");
             return Response.status(Response.Status.UNAUTHORIZED).entity(message).build();
         }
@@ -194,7 +190,9 @@ public class AuthenticationService {
     @Path("addrole")
     @RolesAllowed(value = {Group.ADMIN})
     public Response addRole(@QueryParam("email") String email, @QueryParam("role") String role) {
+        JSONObject message = new JSONObject();
         if (!roleExists(role)) {
+            message.put("message", "role does not exist");
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
@@ -205,10 +203,10 @@ public class AuthenticationService {
             psg.executeUpdate();
         } catch (SQLException ex) {
             log.log(Level.SEVERE, null, ex);
+            message.put("message", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        JSONObject message = new JSONObject();
         message.put("message", "role added");
         return Response.ok().entity(message).build();
     }
