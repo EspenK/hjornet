@@ -96,10 +96,10 @@ public class AuthenticationService {
             String token = issueToken(result.getCallerPrincipal().getName(),
                     result.getCallerGroups(), request);
             message.put("token", token);
-            return Response.ok(message).header(HttpHeaders.AUTHORIZATION, "Bearer " + token).build();
+            return Response.ok(message.toString()).header(HttpHeaders.AUTHORIZATION, "Bearer " + token).build();
         } else {
             message.put("message", "user credentials are not valid");
-            return Response.status(Response.Status.UNAUTHORIZED).entity(message).build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity(message.toString()).build();
         }
     }
 
@@ -164,7 +164,7 @@ public class AuthenticationService {
         } else {
             JSONObject message = new JSONObject();
             message.put("message", "user with that email already exists");
-            return Response.status(Response.Status.BAD_REQUEST).entity(message).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(message.toString()).build();
         }
     }
 
@@ -193,7 +193,7 @@ public class AuthenticationService {
         JSONObject message = new JSONObject();
         if (!roleExists(role)) {
             message.put("message", "role does not exist");
-            return Response.status(Response.Status.FORBIDDEN).build();
+            return Response.status(Response.Status.FORBIDDEN).entity(message.toString()).build();
         }
 
         try (Connection c = dataSource.getConnection();
@@ -204,11 +204,11 @@ public class AuthenticationService {
         } catch (SQLException ex) {
             log.log(Level.SEVERE, null, ex);
             message.put("message", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(message.toString()).build();
         }
 
         message.put("message", "role added");
-        return Response.ok().entity(message).build();
+        return Response.ok().entity(message.toString()).build();
     }
 
     /**

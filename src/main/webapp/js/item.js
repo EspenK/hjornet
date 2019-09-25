@@ -55,10 +55,12 @@ async function _showItems(container) {
             showItem(item);
         };
 
+        let price = item.buyer == null ? item.price + ' kr' : 'Sold';
+
         section.innerHTML = `
-        <img alt="${item.title}" src="https://www.thetimes.co.uk/imageserver/image/methode%2Ftimes%2Fprod%2Fweb%2Fbin%2F696b3456-abbf-11e8-aa49-f23497b9293e.jpg?crop=3333%2C1875%2C76%2C340&resize=685">
+        <img alt="${item.title}" src="img/stock.jpg">
         <div class="padded left">${item.owner.postalArea} ${item.owner.postalCode}</div>
-        <div class="padded right price">${item.price} kr</div>
+        <div class="padded right price">${price}</div>
         <div class="padded clear title">${item.title}</div>
         `;
         container.appendChild(section);
@@ -70,18 +72,40 @@ function showItem(item) {
     waitForElementFirst('itemContainer', 50, _showItem, item)
 }
 
-function _showItem(container, item) {
+async function _showItem(container, item) {
     container.innerHTML = '';
     let section = document.createElement('section');
 
-    section.innerHTML = `
-    <img alt="${item.title}" src="https://www.thetimes.co.uk/imageserver/image/methode%2Ftimes%2Fprod%2Fweb%2Fbin%2F696b3456-abbf-11e8-aa49-f23497b9293e.jpg?crop=3333%2C1875%2C76%2C340&resize=685">
-    <div class="padded left">${item.owner.postalArea} ${item.owner.postalCode} ${item.owner.streetAddress}</div>
-    <div class="padded right price">${item.price} kr</div>
-    <div class="padded clear title">${item.title}</div>
-    <div class="padded">
+    let currentUser = await getCurrentUser();
+
+    let div;
+
+    if (currentUser == null) {
+        div = `<div class="padded textCenter">Log in to buy</div>`;
+    } else {
+        div = `<div class="padded">
         <button class="large" onclick="handleBuy(${item.id})" type="button">Buy</button>
-    </div>
+        </div>`;
+        if (item.buyer != null) {
+            if (item.buyer.email === currentUser.email) {
+                div = `<div class="padded textCenter">You bought this item</div>`;
+            } else {
+                div = `<div class="padded textCenter">This item is sold</div>`;
+            }
+        }
+        if (currentUser.email === item.owner.email) {
+            div = `<div class="padded textCenter">This is your item</div>`;
+        }
+    }
+
+    let price = item.buyer == null ? item.price + ' kr' : 'Sold';
+
+    section.innerHTML = `
+    <img alt="${item.title}" src="img/stock.jpg">
+    <div class="padded left">${item.owner.postalArea} ${item.owner.postalCode}, ${item.owner.streetAddress}</div>
+    <div class="padded right price">${price}</div>
+    <div class="padded clear title">${item.title}</div>
+    ${div}
     <div class="padded">${item.description}</div>
     `;
     container.appendChild(section);
