@@ -50,26 +50,3 @@ function _showListings(container) {
         container.appendChild(section);
     }
 }
-
-function _showListingFull(container, listing) {
-    container.innerHTML = '';
-
-    let section = document.createElement('section');
-
-    section.innerHTML = `
-    <img alt="${listing.title}" src="${listing.image}">
-    <div class="padded left postalArea">Oslo</div>
-    <div class="padded right price">${listing.price} kr</div>
-    <div class="padded clear title">${listing.title}</div>
-    <div class="padded">
-        <button class="large" onclick="location.href='#cantact'" type="button">Contact seller</button>
-    </div>
-    <div class="padded">${listing.description}</div>
-    `;
-    container.appendChild(section);
-}
-
-function showListingFull(listing) {
-    location.href = '#listing';
-    waitForElementFirst('listingContainer', 50, _showListingFull, listing)
-}
