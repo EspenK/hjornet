@@ -40,7 +40,7 @@ async function handleSignIn(form) {
         let data = await response.json();
         localStorage.setItem('bearer', data.token);
         await updateNavUser();
-        location.href = '#items'
+        showItems();
     }
 }
 
@@ -52,7 +52,7 @@ async function handleSignOut() {
         } else {
             localStorage.removeItem('bearer');
             await updateNavUser();
-            location.href = '#items';
+            showItems();
         }
     }
 }

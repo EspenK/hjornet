@@ -35,7 +35,7 @@ async function handleNewItem(form) {
         console.log(data.message)
     }
 
-    location.href = '#items';
+    showItems();
 }
 
 function showItems() {
@@ -125,7 +125,7 @@ async function handleBuy(id) {
     let data = await response.json();
     console.log(data.message);
 
-    location.href = '#items';
+    showItems();
 }
 
 function readFileAsync(file) {
