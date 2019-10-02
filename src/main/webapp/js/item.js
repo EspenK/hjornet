@@ -39,6 +39,7 @@ async function handleNewItem(form) {
 }
 
 function showItems() {
+    location.href = '#items';
     waitForElementFirst('itemsContainer', 50, _showItems);
 }
 
