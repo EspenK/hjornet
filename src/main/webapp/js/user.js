@@ -40,7 +40,7 @@ async function handleSignIn(form) {
         let data = await response.json();
         localStorage.setItem('bearer', data.token);
         await updateNavUser();
-        showItems();
+        location.href = '#items'
     }
 }
 
@@ -52,7 +52,7 @@ async function handleSignOut() {
         } else {
             localStorage.removeItem('bearer');
             await updateNavUser();
-            showItems();
+            location.href = '#items';
         }
     }
 }
@@ -65,7 +65,6 @@ async function getCurrentUser() {
     if (isBearerCached()) {
         let response = await fetch_secure('api/auth/currentuser', {method: 'GET'});
         if (response.status !== 200) {
-            localStorage.removeItem('bearer');
             return null;
         } else {
             return await response.json();

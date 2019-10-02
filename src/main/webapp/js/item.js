@@ -35,11 +35,10 @@ async function handleNewItem(form) {
         console.log(data.message)
     }
 
-    showItems();
+    location.href = '#items';
 }
 
 function showItems() {
-    location.href = '#items';
     waitForElementFirst('itemsContainer', 50, _showItems);
 }
 
@@ -125,7 +124,7 @@ async function handleBuy(id) {
     let data = await response.json();
     console.log(data.message);
 
-    showItems();
+    location.href = '#items';
 }
 
 function readFileAsync(file) {
