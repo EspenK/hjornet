@@ -65,7 +65,6 @@ async function getCurrentUser() {
     if (isBearerCached()) {
         let response = await fetch_secure('api/auth/currentuser', {method: 'GET'});
         if (response.status !== 200) {
-            localStorage.removeItem('bearer');
             return null;
         } else {
             return await response.json();
